@@ -33,8 +33,8 @@ export default function SiteHeader() {
           <Link href="/" className="text-xs font-bold uppercase tracking-widest text-white/70 hover:text-white transition-colors">
             Home
           </Link>
-          <Link href="/pakistan" className="text-xs font-bold uppercase tracking-widest text-white/70 hover:text-white transition-colors">
-            Pakistan
+          <Link href="/countries" className="text-xs font-bold uppercase tracking-widest text-white/70 hover:text-white transition-colors">
+            All Countries
           </Link>
           <Link href="/tasbih" className="text-xs font-bold uppercase tracking-widest text-white/70 hover:text-white transition-colors">
             Tasbih
