@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@layer theme {
+  :root {
+    --primary: #0a3d2e;
+    --primary-dark: #072a1f;
+    --accent: #c9a84c;
+    --accent-light: #e8c96a;
+    --glass-bg: rgba(255, 255, 255, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-dark: #1A202C;
+    --text-muted: #718096;
+    --radius: 1.5rem;
+    --secondary: #f0f4f0;
+    --muted: #e8ede8;
+    --foreground: #0a3d2e;
+  }
+}
+
+body {
+  background: radial-gradient(ellipse at top left, #0a3d2e 0%, #0f4a36 40%, #1a5c2e 100%);
+  background-attachment: fixed;
+  color: var(--text-dark);
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-dark {
+  background: rgba(10, 61, 46, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+.pulse-gold {
+  animation: pulseGold 2s ease-in-out infinite;
+}
+@keyframes pulseGold {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
