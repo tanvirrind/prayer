@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import ProductAds from "@/components/ProductAds";
 import { getMajorCities } from "@/lib/cities";
+import { getCitiesBySlug } from "@/lib/cities";
 import PaginatedGrid from "@/components/PaginatedGrid";
 
 const countryData: Record<string, { name: string; flag: string }> = {
@@ -185,7 +186,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const { country } = await params;
   const data = countryData[country];
   if (!data) return {};
-  const cities = getMajorCities(country);
+  const cities = getCitiesBySlug(country);
   return {
     title: `Prayer Times ${data.name} | Namaz Timings All Cities`,
     description: `Accurate Islamic prayer times for all cities in ${data.name}. Get today's Fajr, Dhuhr, Asr, Maghrib and Isha timings for ${cities.slice(0, 5).join(", ")} and more.`,
@@ -201,7 +202,7 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
   const data = countryData[country];
   if (!data) notFound();
 
-  const cities = getMajorCities(country);
+  const cities = getCitiesBySlug(country);
 
   return (
     <div className="min-h-screen flex flex-col">

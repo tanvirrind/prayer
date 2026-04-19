@@ -5,6 +5,9 @@ import SiteHeader from "@/components/SiteHeader";
 import ProductAds from "@/components/ProductAds";
 import { getSingleCityCoords, getMajorCities } from "@/lib/cities";
 import { getCityDescription } from "@/lib/cityDescription";
+import PrayerCardsLive from "@/components/PrayerCardsLive";
+import LiveClockBox from "@/components/LiveClockBox";
+
 
 interface Timings {
   Fajr: string; Sunrise: string; Dhuhr: string;
@@ -255,45 +258,23 @@ if (!data) notFound();
                 {date.hijri.day} {date.hijri.month.en} {date.hijri.year} AH
               </p>
             </div>
-            <div className="text-center px-6 py-4 rounded-2xl" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}>
-              <div className="text-xs font-black uppercase tracking-widest text-white/45 mb-1">Timezone</div>
-              <div className="font-bold text-white">{meta.timezone}</div>
+            <LiveClockBox timezone={meta.timezone} />
             </div>
-          </div>
           <div className="absolute top-0 right-0 bottom-0 w-1/3 pointer-events-none" style={{ background: "linear-gradient(to left, rgba(201,168,76,0.06), transparent)" }} />
           <div className="absolute -right-16 -bottom-16 w-48 h-48 rounded-full pointer-events-none" style={{ background: "rgba(201,168,76,0.08)", filter: "blur(50px)" }} />
         </div>
       </section>
 
-      {/* Main Prayers */}
-      <section className="max-w-4xl mx-auto px-4 pb-4 w-full">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-          {mainPrayers.map((p) => (
-            <div
-              key={p.name}
-              className="p-5 rounded-2xl text-white transition-all hover:scale-[1.02]"
-              style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", backdropFilter: "blur(12px)" }}
-            >
-              <div className="text-2xl mb-4">{p.icon}</div>
-              <div className="text-xs font-black uppercase tracking-widest text-white/50 mb-1">{p.name}</div>
-              <div className="text-2xl font-black tracking-tight">{p.time}</div>
-              <div className="text-xs text-white/35 mt-1">{p.desc}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+    {/* DELETE these two sections: */}
+{/* Main Prayers */}
+{/* Extra timings */}
 
-      {/* Extra timings */}
-      <section className="max-w-4xl mx-auto px-4 pb-6 w-full">
-        <div className="grid grid-cols-3 gap-3">
-          {extraTimings.map((t) => (
-            <div key={t.name} className="p-4 rounded-2xl text-center bg-white/90">
-              <div className="text-xs font-black uppercase tracking-wider text-gray-400 mb-1">{t.name}</div>
-              <div className="text-xl font-black" style={{ color: "#0a3d2e" }}>{t.time}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+{/* REPLACE WITH: */}
+<PrayerCardsLive
+  mainPrayers={mainPrayers}
+  extraTimings={extraTimings}
+  timezone={meta.timezone}
+/>
 
       {/* Method */}
       <section className="max-w-4xl mx-auto px-4 pb-8 w-full">
