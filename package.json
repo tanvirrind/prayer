@@ -13,6 +13,7 @@
     "@google/generative-ai": "^0.24.1",
     "cities.json": "^1.1.50",
     "clsx": "^2.1.1",
+    "firebase": "^12.12.0",
     "groq-sdk": "^1.1.2",
     "lucide-react": "^0.383.0",
     "motion": "^11.0.0",

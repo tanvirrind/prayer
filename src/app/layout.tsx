@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "@/components/Footer";
+import FirebaseProvider from "@/components/FirebaseProvider"; // Adjust import path
 
 export const metadata: Metadata = {
   title: {

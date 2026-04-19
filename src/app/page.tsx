@@ -26,11 +26,11 @@ const features = [
 ];
 
 export const metadata: Metadata = {
-  title: "Namaz Timings Pakistan | Prayer Times All Cities | Souq Al Madina",
+  title: "Prayer Timings in Pakistan | Prayer Times All Cities | Souq Al Madina",
   description:
-    "Accurate Namaz timings for all cities in Pakistan — Karachi, Lahore, Islamabad, Faisalabad and 50+ cities. Also covers UAE, UK, USA, Saudi Arabia. Fajr, Dhuhr, Asr, Maghrib, Isha times updated daily.",
+    "Accurate Prayer timings for all cities in Pakistan — Karachi, Lahore, Islamabad, Faisalabad and 50+ cities. Also covers UAE, UK, USA, Saudi Arabia. Fajr, Dhuhr, Asr, Maghrib, Isha times updated daily.",
   keywords:
-    "namaz timings Pakistan, prayer times Karachi, prayer times Lahore, namaz time today, salah times Pakistan, Islamic prayer times",
+    "prayer timings Pakistan, prayer times Karachi, prayer times Lahore, prayer time today, salah times Pakistan, Islamic prayer times",
   alternates: { canonical: "https://prayer.souqalmadina.com.pk" },
 };
 
@@ -199,7 +199,7 @@ export default function HomePage() {
             <span className="text-2xl">🇵🇰</span>
             <div>
               <h2 className="text-xl font-black text-white tracking-tight">
-                Pakistan Namaz Timings
+                Prayer Timings in Pakistan's Top Cities
               </h2>
               <p className="text-xs text-white/50 font-bold uppercase tracking-wider">
                 Most searched cities
@@ -220,7 +220,7 @@ export default function HomePage() {
                 <div>
                   <div className="font-bold text-sm">{city}</div>
                   <div className="text-[10px] text-white/45 font-bold uppercase tracking-wider mt-0.5">
-                    Namaz Timings
+                    Prayer Timings
                   </div>
                 </div>
                 <span className="text-white/30 group-hover:text-yellow-400 transition-colors text-lg">→</span>
@@ -329,7 +329,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4">
           <article>
             <h2 className="text-3xl font-black mb-6" style={{ color: "#0a3d2e", letterSpacing: "-1px" }}>
-              About Namaz Timings in Pakistan
+              About Prayer Timings in Pakistan
             </h2>
             <div className="prose prose-stone max-w-none text-gray-600 leading-relaxed space-y-4">
               <p>
@@ -339,7 +339,7 @@ export default function HomePage() {
                 We use the <strong>Aladhan API</strong> — a globally trusted source for Islamic prayer time calculations — to ensure you always have the correct <strong>Fajr, Dhuhr, Asr, Maghrib and Isha</strong> times for your city. Times are updated daily and adjusted for your local timezone.
               </p>
               <p>
-                Whether you are in Pakistan or traveling abroad to Saudi Arabia, UAE, UK, USA or anywhere in the world, Souq Al Madina Prayer Times keeps you connected to your daily Salah.
+                Whether you are in Pakistan or traveling abroad to Saudi Arabia, UAE, UK, USA or anywhere in the world, Souq Al Madina Prayer Timeings keeps you connected to your daily Salah.
               </p>
             </div>
           </article>

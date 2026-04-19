@@ -15,7 +15,7 @@ export default function Footer() {
             </div>
           </div>
           <p className="text-sm text-white/50 max-w-xs leading-relaxed">
-            Accurate Namaz timings for Muslims worldwide. Powered by Souq Al Madina — your trusted Islamic essentials store.
+            Accurate Prayer timings for Muslims worldwide. Powered by Souq Al Madina — your trusted Islamic essentials store.
           </p>
         </div>
         <div className="flex gap-12">
