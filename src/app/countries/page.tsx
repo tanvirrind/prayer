@@ -1,3 +1,4 @@
+import PaginatedGrid from "@/components/PaginatedGrid.tsx";
 import Link from "next/link";
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
@@ -325,7 +326,7 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="text-white/60 text-base leading-relaxed max-w-lg mx-auto">
-            Accurate Namaz timings for {countries.length} countries and hundreds of cities.
+            Accurate Prayer timings for {countries.length} countries and hundreds of cities.
             Updated daily.
           </p>
         </div>
@@ -336,7 +337,6 @@ export default function HomePage() {
   <div className="space-y-10">
     {countryGroups.map((group) => (
       <div key={group.region}>
-
         {/* Region Header */}
         <div className="flex items-center gap-3 mb-4">
           <span className="text-2xl">{group.icon}</span>
@@ -349,52 +349,32 @@ export default function HomePage() {
           </span>
         </div>
 
-        {/* Country Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {group.countries.map((country) => (
-            <Link
-              key={country.slug}
-              href={`/${country.slug}`}
-              className="group flex items-center justify-between p-5 rounded-2xl bg-white/90 border border-white/30 hover:border-yellow-400 hover:shadow-xl transition-all duration-200 hover:scale-[1.02]"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">{country.flag}</span>
-                <div>
-                  <div className="font-bold text-base" style={{ color: "#0a3d2e" }}>
-                    {country.name}
-                  </div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mt-0.5">
-                    {country.cities}+ Cities
-                  </div>
-                </div>
-              </div>
-              <span className="text-gray-300 group-hover:text-yellow-500 transition-colors text-xl">
-                →
-              </span>
-            </Link>
-          ))}
-        </div>
-
+        {/* Paginated country cards */}
+        <PaginatedGrid
+          type="countries"
+          items={group.countries}
+          perPage={24}
+        />
       </div>
     ))}
   </div>
 
-        {/* SEO text */}
-        <article className="mt-12 p-8 bg-white/90 rounded-3xl">
-          <h2 className="text-2xl font-black mb-4" style={{ color: "#0a3d2e" }}>
-            Accurate Islamic Prayer Times Worldwide
-          </h2>
-          <p className="text-gray-600 leading-relaxed mb-4">
-            Find precise Namaz timings for any city in the world. Whether you are in Pakistan,
-            Saudi Arabia, the UAE, or anywhere else, our platform provides daily updated Fajr,
-            Dhuhr, Asr, Maghrib and Isha prayer times based on trusted astronomical calculations.
-          </p>
-          <p className="text-gray-600 leading-relaxed">
-            Our prayer times are sourced from the globally trusted Aladhan API, used by millions
-            of Muslims worldwide. Select your country above to find accurate timings for your city.
-          </p>
-        </article>
-      </main>
+  {/* SEO text */}
+  <article className="mt-12 p-8 bg-white/90 rounded-3xl">
+    <h2 className="text-2xl font-black mb-4" style={{ color: "#0a3d2e" }}>
+      Accurate Islamic Prayer Times Worldwide
+    </h2>
+    <p className="text-gray-600 leading-relaxed mb-4">
+      Find precise Prayer timings for any city in the world. Whether you are in Pakistan,
+      Saudi Arabia, the UAE, or anywhere else, our platform provides daily updated Fajr,
+      Dhuhr, Asr, Maghrib and Isha prayer times based on trusted astronomical calculations.
+    </p>
+    <p className="text-gray-600 leading-relaxed">
+      Our prayer times are sourced from the globally trusted Aladhan API, used by millions
+      of Muslims worldwide. Select your country above to find accurate timings for your city.
+    </p>
+  </article>
+</main>
 
       {/* Product Ads */}
       <div className="bg-white py-2">

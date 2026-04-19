@@ -11,25 +11,35 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
+    "/[country]/[city]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[country]/[city]/page.js"
+    ],
     "/[country]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/[country]/page.js"
     ],
-    "/[country]/[city]/page": [
+    "/sitemap.xml/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[country]/[city]/page.js"
+      "static/chunks/app/sitemap.xml/route.js"
     ],
     "/countries/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/countries/page.js"
     ],
-    "/sitemap.xml/route": [
+    "/sitemap-index/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/sitemap.xml/route.js"
+      "static/chunks/app/sitemap-index/route.js"
+    ],
+    "/sitemap-cities/[id]/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/sitemap-cities/[id]/route.js"
     ]
   }
 }

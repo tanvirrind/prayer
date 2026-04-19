@@ -3,6 +3,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import ProductAds from "@/components/ProductAds";
+import { getSingleCityCoords, getMajorCities } from "@/lib/cities";
+import { getLocalMosques } from "@/lib/mosques";
+import { getCityDescription } from "@/lib/cityDescription";
 
 interface Timings {
   Fajr: string; Sunrise: string; Dhuhr: string;
@@ -22,6 +25,18 @@ interface AladhanDay {
     gregorian: { day: string; month: { en: string }; year: string };
   };
 }
+
+// 1. Slug to ISO Code Mapping Utility
+const countryCodeMap: Record<string, string> = {
+  "pakistan": "PK",
+  "germany": "DE",
+  "saudi-arabia": "SA",
+  "united-arab-emirates": "AE",
+  "united-kingdom": "GB",
+  "india": "IN",
+  "indonesia": "ID",
+  "nigeria": "NG"
+};
 
 async function getPrayerTimes(city: string, country: string): Promise<AladhanData | null> {
   try {
@@ -68,12 +83,12 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const cityName = toTitleCase(city);
   const countryName = toTitleCase(country);
   return {
-    title: `Prayer Times ${cityName} Today | Namaz Timings ${cityName} ${countryName}`,
-    description: `Today's accurate Namaz timings for ${cityName}, ${countryName}. Fajr, Sunrise, Dhuhr, Asr, Maghrib and Isha prayer times with Hijri date. Updated daily.`,
+    title: `Prayer Times ${cityName} Today | Prayer Timings ${cityName} ${countryName}`,
+    description: `Today's accurate prayer timings for ${cityName}, ${countryName}. Fajr, Sunrise, Dhuhr, Asr, Maghrib and Isha prayer times with Hijri date. Updated daily.`,
     keywords: `prayer times ${cityName}, namaz timing ${cityName} today, ${cityName} prayer schedule, fajr time ${cityName}, isha time ${cityName}`,
     alternates: { canonical: `https://prayer.souqalmadina.com.pk/${country}/${city}` },
     openGraph: {
-      title: `Namaz Timings ${cityName} — Today`,
+      title: `Prayer Timings ${cityName} — Today`,
       description: `Accurate Fajr, Dhuhr, Asr, Maghrib & Isha times for ${cityName}, ${countryName}.`,
       type: "website",
     },
@@ -85,16 +100,25 @@ export const dynamic = "force-dynamic";
 export default async function CityPage({ params }: { params: Promise<{ country: string; city: string }> }) {
   const { country, city } = await params;
   
-  // Fetch both daily and monthly data concurrently
-  const [data, monthData] = await Promise.all([
-    getPrayerTimes(city, country),
-    getMonthlyCalendar(city, country)
-  ]);
+  // 2. Coordinate Resolution
+  const countryCode = countryCodeMap[country.toLowerCase()] || "";
+  const cleanCityName = city.replace(/-/g, ' ');
+  const coords = countryCode ? getSingleCityCoords(countryCode, cleanCityName) : null;
   
-  if (!data) notFound();
+ // Move these up so getCityDescription can use them
+const cityName = toTitleCase(city);
+const countryName = toTitleCase(country);
 
-  const cityName = toTitleCase(city);
-  const countryName = toTitleCase(country);
+// 3. Concurrent Data Fetching (Includes Mosques & Description)
+const [data, monthData, mosques, cityDescription] = await Promise.all([
+  getPrayerTimes(city, country),
+  getMonthlyCalendar(city, country),
+  coords ? getLocalMosques(parseFloat(coords.lat as string), parseFloat(coords.lng as string)) : Promise.resolve([]),
+  getCityDescription(cityName, countryName, country, city),
+]);
+
+
+if (!data) notFound();
   const { timings, date, meta } = data;
 
   const mainPrayers = [
@@ -126,7 +150,6 @@ export default async function CityPage({ params }: { params: Promise<{ country: 
     }
   ];
 
-  // JSON-LD structured data
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -199,7 +222,6 @@ export default async function CityPage({ params }: { params: Promise<{ country: 
               <div className="font-bold text-white">{meta.timezone}</div>
             </div>
           </div>
-          {/* Decorative */}
           <div className="absolute top-0 right-0 bottom-0 w-1/3 pointer-events-none" style={{ background: "linear-gradient(to left, rgba(201,168,76,0.06), transparent)" }} />
           <div className="absolute -right-16 -bottom-16 w-48 h-48 rounded-full pointer-events-none" style={{ background: "rgba(201,168,76,0.08)", filter: "blur(50px)" }} />
         </div>
@@ -248,6 +270,7 @@ export default async function CityPage({ params }: { params: Promise<{ country: 
           </div>
         </div>
       </section>
+
       {/* Product Ads */}
       <div className="bg-white py-2">
         <ProductAds />
@@ -300,7 +323,6 @@ export default async function CityPage({ params }: { params: Promise<{ country: 
           </div>
         </section>
       )}
-
       {/* FAQ Section */}
       <section className="max-w-4xl mx-auto px-4 pb-8 w-full">
         <h2 className="text-2xl font-black text-white mb-6">Frequently Asked Questions</h2>
@@ -313,6 +335,34 @@ export default async function CityPage({ params }: { params: Promise<{ country: 
           ))}
         </div>
       </section>      
+      
+      {/* Mosques Section */}
+{mosques.length > 0 && (
+  <section className="max-w-4xl mx-auto px-4 pb-8 w-full">
+    <div className="p-6 rounded-2xl border border-white/10" style={{ background: "rgba(255,255,255,0.05)" }}>
+      <h2 className="text-xl font-bold text-white mb-4">Mosques & Islamic Centers in {cityName}</h2>
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {mosques.map((name, i) => (
+          <li key={i} className="flex items-start gap-3 text-sm">
+            <a
+              href={`https://www.google.com/maps/search/${encodeURIComponent(name + " " + cityName)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 text-white/70 hover:text-white transition-colors group"
+            >
+              <span style={{ color: "#c9a84c" }} className="group-hover:scale-110 transition-transform">🕌</span>
+              <span className="underline underline-offset-2 decoration-white/20 group-hover:decoration-white/60">{name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p className="text-white/25 text-xs mt-5 font-bold uppercase tracking-wider">
+        Source: OpenStreetMap contributors
+      </p>
+    </div>
+  </section>
+)}
+
       {/* SEO Article */}
       <section className="max-w-4xl mx-auto px-4 py-10 w-full">
         <article
@@ -332,7 +382,63 @@ export default async function CityPage({ params }: { params: Promise<{ country: 
           </div>
         </article>
       </section>
-
+{/* City Description */}
+{cityDescription && (
+  <section className="max-w-4xl mx-auto px-4 pb-8 w-full">
+    <div
+      className="p-8 md:p-10 rounded-[28px] text-white"
+      style={{
+        background: "rgba(10,61,46,0.7)",
+        border: "1px solid rgba(201,168,76,0.2)",
+        backdropFilter: "blur(16px)",
+      }}
+    >
+      <h2 className="text-2xl font-black mb-6 text-white">
+        About {cityName}
+      </h2>
+      <div className="space-y-4">
+        {cityDescription.split("\n\n").filter(Boolean).map((para, i) => (
+          <p key={i} className="text-white/70 leading-relaxed text-sm">
+            {para}
+          </p>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+{/* Other Cities Section */}
+{(() => {
+  const majorCities = getMajorCities(country).filter(
+    (c) => c.toLowerCase() !== cityName.toLowerCase()
+  );
+  return majorCities.length > 0 ? (
+    <section className="max-w-4xl mx-auto px-4 pb-8 w-full">
+      <div
+        className="p-8 rounded-[28px]"
+        style={{ background: "rgba(10,61,46,0.7)", border: "1px solid rgba(201,168,76,0.2)", backdropFilter: "blur(16px)" }}
+      >
+        <h2 className="text-xl font-bold text-white mb-6">
+          Prayer Timings in Other {countryName} Cities
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {majorCities.map((otherCity) => {
+            const citySlug = otherCity.toLowerCase().replace(/\s+/g, "-");
+            return (
+              <Link
+                key={citySlug}
+                href={`/${country}/${citySlug}`}
+                className="px-4 py-3 rounded-xl text-sm font-semibold text-white/70 hover:text-white transition-all hover:scale-[1.02]"
+                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}
+              >
+                🕌 {otherCity}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  ) : null;
+})()}
       {/* Back link */}
       <div className="max-w-4xl mx-auto px-4 pb-12">
         <Link

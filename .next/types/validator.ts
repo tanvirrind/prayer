@@ -110,6 +110,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../src/app/sitemap-cities/[id]/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/sitemap-cities/[id]">> = Specific
+  const handler = {} as typeof import("../../src/app/sitemap-cities/[id]/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/sitemap-index/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/sitemap-index">> = Specific
+  const handler = {} as typeof import("../../src/app/sitemap-index/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 
 
 
