@@ -37,13 +37,33 @@ const countryCodeMap: Record<string, string> = {
   "indonesia": "ID",
   "nigeria": "NG"
 };
+// imports...
 
+function getMethodByCountry(countrySlug: string): number {
+  const methods: Record<string, number> = {
+    "saudi-arabia": 4,
+    "united-states": 2,
+    "canada": 2,
+    "united-kingdom": 1,
+    "pakistan": 1,
+    "india": 1,
+    "bangladesh": 1,
+    "egypt": 5,
+    "turkey": 9,
+    "malaysia": 3,
+    "indonesia": 11,
+  };
+  return methods[countrySlug] ?? 3;
+}
+
+// ✅ New — with method
 async function getPrayerTimes(city: string, country: string): Promise<AladhanData | null> {
   try {
     const cityName = city.replace(/-/g, " ");
     const countryName = country.replace(/-/g, " ");
+    const method = getMethodByCountry(country); // ← add this
     const res = await fetch(
-      `https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(cityName)}&country=${encodeURIComponent(countryName)}`,
+      `https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(cityName)}&country=${encodeURIComponent(countryName)}&method=${method}`,
       { next: { revalidate: 3600 } }
     );
     if (!res.ok) return null;
@@ -58,12 +78,10 @@ async function getMonthlyCalendar(city: string, country: string): Promise<Aladha
   try {
     const cityName = city.replace(/-/g, " ");
     const countryName = country.replace(/-/g, " ");
+    const method = getMethodByCountry(country); // ← add this
     const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-
     const res = await fetch(
-      `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${encodeURIComponent(cityName)}&country=${encodeURIComponent(countryName)}&method=1`,
+      `https://api.aladhan.com/v1/calendarByCity/${now.getFullYear()}/${now.getMonth() + 1}?city=${encodeURIComponent(cityName)}&country=${encodeURIComponent(countryName)}&method=${method}`,
       { next: { revalidate: 86400 } }
     );
     if (!res.ok) return null;
@@ -177,6 +195,28 @@ if (!data) notFound();
       "acceptedAnswer": { "@type": "Answer", "text": f.a }
     }))
   };
+  const prayerScheduleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": `Prayer Times ${cityName} Today`,
+  "startDate": new Date().toISOString().split("T")[0],
+  "location": {
+    "@type": "Place",
+    "name": cityName,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": cityName,
+      "addressCountry": countryName
+    }
+  },
+  "offers": [
+    { "@type": "Offer", "name": "Fajr", "description": timings.Fajr },
+    { "@type": "Offer", "name": "Dhuhr", "description": timings.Dhuhr },
+    { "@type": "Offer", "name": "Asr", "description": timings.Asr },
+    { "@type": "Offer", "name": "Maghrib", "description": timings.Maghrib },
+    { "@type": "Offer", "name": "Isha", "description": timings.Isha },
+  ]
+};
 
   return (
     <div className="min-h-screen flex flex-col">
