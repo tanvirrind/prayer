@@ -1,3 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://prayer.souqalmadina.com.pk/sitemap.xml
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
