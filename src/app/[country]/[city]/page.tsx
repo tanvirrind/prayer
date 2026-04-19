@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import ProductAds from "@/components/ProductAds";
 import { getSingleCityCoords, getMajorCities } from "@/lib/cities";
-import { getLocalMosques } from "@/lib/mosques";
 import { getCityDescription } from "@/lib/cityDescription";
 
 interface Timings {
@@ -374,35 +373,7 @@ if (!data) notFound();
             </div>
           ))}
         </div>
-      </section>      
-      
-      {/* Mosques Section */}
-{mosques.length > 0 && (
-  <section className="max-w-4xl mx-auto px-4 pb-8 w-full">
-    <div className="p-6 rounded-2xl border border-white/10" style={{ background: "rgba(255,255,255,0.05)" }}>
-      <h2 className="text-xl font-bold text-white mb-4">Mosques & Islamic Centers in {cityName}</h2>
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {mosques.map((name, i) => (
-          <li key={i} className="flex items-start gap-3 text-sm">
-            <a
-              href={`https://www.google.com/maps/search/${encodeURIComponent(name + " " + cityName)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 text-white/70 hover:text-white transition-colors group"
-            >
-              <span style={{ color: "#c9a84c" }} className="group-hover:scale-110 transition-transform">🕌</span>
-              <span className="underline underline-offset-2 decoration-white/20 group-hover:decoration-white/60">{name}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <p className="text-white/25 text-xs mt-5 font-bold uppercase tracking-wider">
-        Source: OpenStreetMap contributors
-      </p>
-    </div>
-  </section>
-)}
-
+      </section>     
       {/* SEO Article */}
       <section className="max-w-4xl mx-auto px-4 py-10 w-full">
         <article
