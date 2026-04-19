@@ -177,6 +177,28 @@ if (!data) notFound();
       "acceptedAnswer": { "@type": "Answer", "text": f.a }
     }))
   };
+  const prayerScheduleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": `Prayer Times ${cityName} Today`,
+  "startDate": new Date().toISOString().split("T")[0],
+  "location": {
+    "@type": "Place",
+    "name": cityName,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": cityName,
+      "addressCountry": countryName
+    }
+  },
+  "offers": [
+    { "@type": "Offer", "name": "Fajr", "description": timings.Fajr },
+    { "@type": "Offer", "name": "Dhuhr", "description": timings.Dhuhr },
+    { "@type": "Offer", "name": "Asr", "description": timings.Asr },
+    { "@type": "Offer", "name": "Maghrib", "description": timings.Maghrib },
+    { "@type": "Offer", "name": "Isha", "description": timings.Isha },
+  ]
+};
 
   return (
     <div className="min-h-screen flex flex-col">
