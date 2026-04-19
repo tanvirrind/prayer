@@ -299,7 +299,7 @@ const cityPopulations: Record<string, number> = {
   "yekaterinburg": 1495066, "kazan": 1257391, "chelyabinsk": 1196680,
 };
 
-export function getMajorCities(countrySlug: string, limit: number = 12): string[] {
+export function getMajorCities(countrySlug: string): string[] {
   const code = countryCodeMap[countrySlug];
   if (!code) return [];
 
@@ -311,14 +311,18 @@ export function getMajorCities(countrySlug: string, limit: number = 12): string[
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
+    })
+    .filter((c) => {
+      const pop = cityPopulations[c.name.toLowerCase()] ?? 0;
+      return pop >= 10000;
     });
 
-  return allCities
+  const sortedCities = allCities
     .sort((a, b) => {
       const popA = cityPopulations[a.name.toLowerCase()] ?? 0;
       const popB = cityPopulations[b.name.toLowerCase()] ?? 0;
       return popB - popA;
-    })
-    .slice(0, limit)
-    .map((c) => c.name);
+    });
+
+  return sortedCities.map((c) => c.name);
 }

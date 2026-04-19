@@ -2,10 +2,8 @@ import Groq from "groq-sdk";
 import fs from "fs";
 import path from "path";
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! });
-
 function getCacheFilePath(countrySlug: string, citySlug: string): string {
-  const cacheDir = path.join(process.cwd(), "cache", "city-descriptions");
+  const cacheDir = path.join(process.cwd(), "src", "data", "city-descriptions");
   if (!fs.existsSync(cacheDir)) {
     fs.mkdirSync(cacheDir, { recursive: true });
   }
@@ -20,10 +18,17 @@ export async function getCityDescription(
 ): Promise<string> {
   const cacheFile = getCacheFilePath(countrySlug, citySlug);
 
-  // Return cached version if exists
+  // Return static version if it exists
   if (fs.existsSync(cacheFile)) {
     return fs.readFileSync(cacheFile, "utf-8");
   }
+
+  // Initialize Groq only when needed, avoiding errors if not configured but static file exists
+  if (!process.env.GROQ_API_KEY) {
+    console.warn(`GROQ_API_KEY is missing. Cannot generate description for ${cityName}.`);
+    return "";
+  }
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
   const prompt = `Write a 3-paragraph SEO-optimized description about ${cityName}, ${countryName} for a prayer times website. 
 
@@ -50,7 +55,7 @@ Requirements:
 
       const text = result.choices[0].message.content?.trim() ?? "";
 
-      // Save to cache
+      // Save statically
       fs.writeFileSync(cacheFile, text, "utf-8");
 
       return text;
