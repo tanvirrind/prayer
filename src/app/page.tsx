@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import ProductAds from "@/components/ProductAds";
 import { Compass, Moon, Users } from "lucide-react";
+import LocationPrayerTimes from "@/components/LocationPrayerTimes";
+
 
 const features = [
   { 
@@ -184,7 +186,12 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+<LocationPrayerTimes />
 
+{/* Quick Pakistan city links */}
+<section className="max-w-5xl mx-auto px-4 pb-10 w-full">
+  ...
+</section>
       {/* Quick Pakistan city links — high SEO value */}
       <section className="max-w-5xl mx-auto px-4 pb-10 w-full">
         <div
