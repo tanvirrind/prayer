@@ -67,10 +67,10 @@ export default function LocationPrayerTimes() {
   useEffect(() => {
     async function detectByIP() {
       try {
-        const res = await fetch("https://freeipapi.com/api/json");
-        const json = await res.json();
-        if (!json.city) throw new Error();
-        const { lat, lon, city, country } = json;
+    const res = await fetch("https://freeipapi.com/api/json");
+    const json = await res.json();
+    if (!json.cityName) throw new Error();
+    const { latitude: lat, longitude: lon, cityName: city, countryName: country } = json;
         const prayerRes = await fetch(
           `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=3`
         );
