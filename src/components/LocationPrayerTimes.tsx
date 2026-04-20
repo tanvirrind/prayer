@@ -67,7 +67,7 @@ export default function LocationPrayerTimes() {
   useEffect(() => {
     async function detectByIP() {
       try {
-        const res = await fetch("http://ip-api.com/json/?fields=lat,lon,city,country,timezone");
+        const res = await fetch("https://freeipapi.com/api/json");
         const json = await res.json();
         if (!json.city) throw new Error();
         const { lat, lon, city, country } = json;
