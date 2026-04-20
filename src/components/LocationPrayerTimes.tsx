@@ -20,7 +20,36 @@ interface LocationData {
   timings: Timings;
   timezone: string;
   method: string;
+  isExact: boolean; // true = GPS, false = IP fallback
 }
+
+// Most populous/famous city per country code
+const COUNTRY_DEFAULT_CITY: Record<string, { city: string; lat: number; lon: number }> = {
+  "Pakistan": { city: "Karachi",        lat: 24.8607,  lon: 67.0011  },
+  "United Arab Emirates": { city: "Dubai",          lat: 25.2048,  lon: 55.2708  },
+  "India": { city: "Mumbai",         lat: 19.0760,  lon: 72.8777  },
+  "Saudi Arabia": { city: "Riyadh",         lat: 24.7136,  lon: 46.6753  },
+  "United States": { city: "New York",       lat: 40.7128,  lon: -74.0060 },
+  "United Kingdom": { city: "London",         lat: 51.5074,  lon: -0.1278  },
+  "Bangladesh": { city: "Dhaka",          lat: 23.8103,  lon: 90.4125  },
+  "Turkey": { city: "Istanbul",       lat: 41.0082,  lon: 28.9784  },
+  "Egypt": { city: "Cairo",          lat: 30.0444,  lon: 31.2357  },
+  "Indonesia": { city: "Jakarta",        lat: -6.2088,  lon: 106.8456 },
+  "Malaysia": { city: "Kuala Lumpur",   lat: 3.1390,   lon: 101.6869 },
+  "Nigeria": { city: "Lagos",          lat: 6.5244,   lon: 3.3792   },
+  "Iran": { city: "Tehran",         lat: 35.6892,  lon: 51.3890  },
+  "Iraq": { city: "Baghdad",        lat: 33.3152,  lon: 44.3661  },
+  "Morocco": { city: "Casablanca",     lat: 33.5731,  lon: -7.5898  },
+  "Qatar": { city: "Doha",           lat: 25.2854,  lon: 51.5310  },
+  "Kuwait": { city: "Kuwait City",    lat: 29.3759,  lon: 47.9774  },
+  "Oman": { city: "Muscat",         lat: 23.5880,  lon: 58.3829  },
+  "Jordan": { city: "Amman",          lat: 31.9454,  lon: 35.9284  },
+  "Germany": { city: "Berlin",         lat: 52.5200,  lon: 13.4050  },
+  "France": { city: "Paris",          lat: 48.8566,  lon: 2.3522   },
+  "Canada": { city: "Toronto",        lat: 43.6532,  lon: -79.3832 },
+  "Australia": { city: "Sydney",         lat: -33.8688, lon: 151.2093 },
+  "Singapore": { city: "Singapore",      lat: 1.3521,   lon: 103.8198 },
+};
 
 function to12h(t: string) {
   const clean = t.split(" ")[0];
@@ -50,56 +79,118 @@ function getCurrentMinsInTZ(tz: string) {
 }
 
 const PRAYERS = [
-  { key: "Fajr",    label: "Fajr",    icon: "🌅", desc: "Pre-dawn prayer"   },
-  { key: "Dhuhr",   label: "Dhuhr",   icon: "☀️",  desc: "Midday prayer"     },
-  { key: "Asr",     label: "Asr",     icon: "🌤",  desc: "Afternoon prayer"  },
-  { key: "Maghrib", label: "Maghrib", icon: "🌆",  desc: "Sunset prayer"     },
-  { key: "Isha",    label: "Isha",    icon: "🌙",  desc: "Night prayer"      },
+  { key: "Fajr",    label: "Fajr",    icon: "🌅", desc: "Pre-dawn prayer"  },
+  { key: "Dhuhr",   label: "Dhuhr",   icon: "☀️",  desc: "Midday prayer"    },
+  { key: "Asr",     label: "Asr",     icon: "🌤",  desc: "Afternoon prayer" },
+  { key: "Maghrib", label: "Maghrib", icon: "🌆",  desc: "Sunset prayer"    },
+  { key: "Isha",    label: "Isha",    icon: "🌙",  desc: "Night prayer"     },
 ];
 
+async function fetchPrayerTimes(lat: number, lon: number) {
+  const res = await fetch(
+    `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=3`
+  );
+  const json = await res.json();
+  if (json.code !== 200) throw new Error("Prayer API failed");
+  return json.data;
+}
+
 export default function LocationPrayerTimes() {
-  type StateType = "loading" | "success" | "error";
+  type StateType = "loading" | "requesting" | "success" | "error";
   const [state, setState] = useState<StateType>("loading");
   const [data, setData] = useState<LocationData | null>(null);
   const [error, setError] = useState("");
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    async function detectByIP() {
-  try {
-    const res = await fetch("/api/location");
-    const json = await res.json();
-    console.log("Location API response:", json); // debug
-    
-    const lat = json.Latitude ?? json.latitude;
-    const lon = json.Longitude ?? json.longitude;
-    const city = json.cityName ?? json.city;
-    const country = json.countryName ?? json.country;
-    
-    if (!city || !lat || !lon) throw new Error("Missing location fields");
-    
-    const prayerRes = await fetch(
-      `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=3`
-    );
-    const prayerJson = await prayerRes.json();
-    if (prayerJson.code !== 200) throw new Error();
-    setData({
-      city,
-      country,
-      countrySlug: country.toLowerCase().replace(/\s+/g, "-"),
-      citySlug: city.toLowerCase().replace(/\s+/g, "-"),
-      timings: prayerJson.data.timings,
-      timezone: prayerJson.data.meta.timezone,
-      method: prayerJson.data.meta.method.name,
-    });
-    setState("success");
-  } catch (e) {
-    console.error("Location error:", e); // debug
-    setState("error");
-    setError("Could not detect your location.");
-  }
-}
-    detectByIP();
+    async function init() {
+      // Step 1: Ask for GPS permission
+      setState("requesting");
+
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          // ✅ GPS granted
+          async (pos) => {
+            try {
+              const { latitude: lat, longitude: lon } = pos.coords;
+
+              // Reverse geocode to get city name
+              const geoRes = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+              );
+              const geoJson = await geoRes.json();
+              const city =
+                geoJson.address?.city ||
+                geoJson.address?.town ||
+                geoJson.address?.village ||
+                geoJson.address?.county ||
+                "Your Location";
+              const country = geoJson.address?.country || "";
+
+              const prayerData = await fetchPrayerTimes(lat, lon);
+
+              setData({
+                city,
+                country,
+                countrySlug: country.toLowerCase().replace(/\s+/g, "-"),
+                citySlug: city.toLowerCase().replace(/\s+/g, "-"),
+                timings: prayerData.timings,
+                timezone: prayerData.meta.timezone,
+                method: prayerData.meta.method.name,
+                isExact: true,
+              });
+              setState("success");
+            } catch {
+              setState("error");
+              setError("Could not load prayer times for your location.");
+            }
+          },
+          // ❌ GPS denied — fall back to IP → country → major city
+          async () => {
+            try {
+              const res = await fetch("/api/location");
+              const json = await res.json();
+
+              if (!json.countryCode) throw new Error("No country from IP");
+
+              const countryCode: string = json.countryCode;
+              const countryName: string = json.country || countryCode;
+
+              const fallback = COUNTRY_DEFAULT_CITY[countryName] ?? {
+                city: "Karachi",
+                lat: 21.3891,
+                lon: 39.8579,
+              };
+
+              const prayerData = await fetchPrayerTimes(fallback.lat, fallback.lon);
+
+              setData({
+                city: fallback.city,
+                country: countryName,
+                countrySlug: countryName.toLowerCase().replace(/\s+/g, "-"),
+                citySlug: fallback.city.toLowerCase().replace(/\s+/g, "-"),
+                timings: prayerData.timings,
+                timezone: prayerData.meta.timezone,
+                method: prayerData.meta.method.name,
+                isExact: false,
+              });
+              setState("success");
+            } catch {
+              setState("error");
+              setError("Could not determine your location.");
+            }
+          },
+          // Geolocation options
+          { timeout: 100, maximumAge: 300 }
+        );
+      } else {
+        // Browser doesn't support geolocation — go straight to IP fallback
+        setState("error");
+        setError("Geolocation is not supported by your browser.");
+      }
+    }
+
+    init();
   }, []);
 
   useEffect(() => {
@@ -136,7 +227,7 @@ export default function LocationPrayerTimes() {
           backdropFilter: "blur(16px)",
         }}
       >
-        {/* Same decorative overlays as city page */}
+        {/* decorative glows — unchanged */}
         <div
           className="absolute top-0 right-0 bottom-0 w-1/3 pointer-events-none"
           style={{ background: "linear-gradient(to left, rgba(201,168,76,0.06), transparent)" }}
@@ -148,12 +239,12 @@ export default function LocationPrayerTimes() {
 
         <div className="relative z-10">
 
-          {/* LOADING */}
-          {state === "loading" && (
+          {/* LOADING / REQUESTING */}
+          {(state === "loading" || state === "requesting") && (
             <div className="flex flex-col md:flex-row justify-between items-start gap-6">
               <div>
                 <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest mb-3" style={{ color: "#c9a84c" }}>
-                  📍 Detecting your location…
+                  📍 {state === "requesting" ? "Requesting location access…" : "Loading…"}
                 </div>
                 <div className="text-3xl md:text-5xl font-black text-white/20 mb-2" style={{ letterSpacing: "-1.5px" }}>
                   {readableDate}
@@ -179,50 +270,41 @@ export default function LocationPrayerTimes() {
             </div>
           )}
 
-          {/* SUCCESS — exact city page hero layout */}
+          {/* SUCCESS */}
           {state === "success" && data && (
             <>
-              {/* Hero top row — identical to city page */}
               <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8">
                 <div>
-                  {/* Gold location label */}
                   <div
                     className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest mb-3"
                     style={{ color: "#c9a84c" }}
                   >
-                    📍 {data.city}, {data.country}
+                    {data.isExact ? "📍" : "🌐"} {data.city}, {data.country}
+                    {!data.isExact && (
+                      <span className="text-white/30 normal-case font-normal tracking-normal text-xs ml-1">
+                        (approximate)
+                      </span>
+                    )}
                   </div>
-
-                  {/* Title — same as h1 on city page */}
                   <h2
                     className="text-2xl md:text-3xl font-black text-white tracking-tight mb-6"
                     style={{ letterSpacing: "-1px" }}
                   >
                     Prayer Timings in {data.city}, {data.country}
                   </h2>
-
-                  {/* Large date */}
                   <div
                     className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2"
                     style={{ letterSpacing: "-1.5px" }}
                   >
                     {readableDate}
                   </div>
-
-                  {/* Weekday */}
-                  <p
-                    className="text-lg md:text-xl font-black text-white/70"
-                    style={{ letterSpacing: "-0.5px" }}
-                  >
+                  <p className="text-lg md:text-xl font-black text-white/70" style={{ letterSpacing: "-0.5px" }}>
                     {weekday}
                   </p>
                 </div>
-
-                {/* LiveClockBox — exact same component as city page */}
                 <LiveClockBox timezone={data.timezone} />
               </div>
 
-              {/* Prayer Cards — exact same as city page */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-4">
                 {PRAYERS.map((p, i) => {
                   const time = data.timings[p.key as keyof Timings];
@@ -235,9 +317,7 @@ export default function LocationPrayerTimes() {
                       className="relative p-5 rounded-2xl text-white transition-all hover:scale-[1.02]"
                       style={{
                         background: isNext ? "rgba(201,168,76,0.15)" : "rgba(255,255,255,0.1)",
-                        border: isNext
-                          ? "2px solid rgba(201,168,76,0.7)"
-                          : "1px solid rgba(255,255,255,0.15)",
+                        border: isNext ? "2px solid rgba(201,168,76,0.7)" : "1px solid rgba(255,255,255,0.15)",
                         backdropFilter: "blur(12px)",
                         opacity: isPast ? 0.45 : 1,
                       }}
@@ -266,7 +346,6 @@ export default function LocationPrayerTimes() {
                 })}
               </div>
 
-              {/* Full page link */}
               <div className="flex justify-end">
                 <Link
                   href={`/${data.countrySlug}/${data.citySlug}`}

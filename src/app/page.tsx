@@ -190,7 +190,6 @@ export default function HomePage() {
 
 {/* Quick Pakistan city links */}
 <section className="max-w-5xl mx-auto px-4 pb-10 w-full">
-  ...
 </section>
       {/* Quick Pakistan city links — high SEO value */}
       <section className="max-w-5xl mx-auto px-4 pb-10 w-full">
