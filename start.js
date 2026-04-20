@@ -27,10 +27,14 @@ function startServer() {
   console.log('Starting server...');
   const server = spawn('node', ['.next/standalone/server.js'], {
     stdio: 'inherit',
-    env: { ...process.env, NODE_ENV: 'production' },
+    env: { 
+      ...process.env, 
+      NODE_ENV: 'production',
+      PORT: process.env.PORT || 3000,
+      HOSTNAME: '0.0.0.0'
+    },
     shell: process.platform === 'win32'
   });
-
   server.on('close', (code) => {
     process.exit(code);
   });
