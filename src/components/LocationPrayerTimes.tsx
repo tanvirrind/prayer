@@ -66,36 +66,39 @@ export default function LocationPrayerTimes() {
 
   useEffect(() => {
     async function detectByIP() {
-      try {
-const res = await fetch("/api/location");
-const json = await res.json();
-if (!json.cityName) throw new Error();
-const { 
-  Latitude: lat, 
-  Longitude: lon, 
-  cityName: city, 
-  countryName: country 
-} = json;
-        const prayerRes = await fetch(
-          `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=3`
-        );
-        const prayerJson = await prayerRes.json();
-        if (prayerJson.code !== 200) throw new Error();
-        setData({
-          city,
-          country,
-          countrySlug: country.toLowerCase().replace(/\s+/g, "-"),
-          citySlug: city.toLowerCase().replace(/\s+/g, "-"),
-          timings: prayerJson.data.timings,
-          timezone: prayerJson.data.meta.timezone,
-          method: prayerJson.data.meta.method.name,
-        });
-        setState("success");
-      } catch {
-        setState("error");
-        setError("Could not detect your location.");
-      }
-    }
+  try {
+    const res = await fetch("/api/location");
+    const json = await res.json();
+    console.log("Location API response:", json); // debug
+    
+    const lat = json.Latitude ?? json.latitude;
+    const lon = json.Longitude ?? json.longitude;
+    const city = json.cityName ?? json.city;
+    const country = json.countryName ?? json.country;
+    
+    if (!city || !lat || !lon) throw new Error("Missing location fields");
+    
+    const prayerRes = await fetch(
+      `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=3`
+    );
+    const prayerJson = await prayerRes.json();
+    if (prayerJson.code !== 200) throw new Error();
+    setData({
+      city,
+      country,
+      countrySlug: country.toLowerCase().replace(/\s+/g, "-"),
+      citySlug: city.toLowerCase().replace(/\s+/g, "-"),
+      timings: prayerJson.data.timings,
+      timezone: prayerJson.data.meta.timezone,
+      method: prayerJson.data.meta.method.name,
+    });
+    setState("success");
+  } catch (e) {
+    console.error("Location error:", e); // debug
+    setState("error");
+    setError("Could not detect your location.");
+  }
+}
     detectByIP();
   }, []);
 
