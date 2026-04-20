@@ -216,7 +216,7 @@ export default function HomePage() {
             {pakistanCountry.cities.map((city) => (
               <Link
                 key={city}
-                href={`/pakistan/${city.toLowerCase().replace(/ /g, "-")}`}
+                href={`/pakistan/prayer-times-${city.toLowerCase().replace(/ /g, "-")}`}
                 className="group flex items-center justify-between p-4 rounded-2xl text-white transition-all duration-200 hover:scale-[1.02]"
                 style={{
                   background: "rgba(255,255,255,0.08)",

@@ -23,7 +23,7 @@ function getAllCityUrls() {
     const cities = getCitiesBySlug(countrySlug);
     for (const city of cities) {
       urls.push({
-        url: `${BASE}/${countrySlug}/${sanitizeCitySlug(city)}`,
+        url: `${BASE}/${countrySlug}/prayer-times-${sanitizeCitySlug(city)}`,
         countrySlug,
       });
     }

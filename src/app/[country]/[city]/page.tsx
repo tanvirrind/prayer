@@ -100,7 +100,8 @@ function toTitleCase(s: string) {
 
 export async function generateMetadata({ params }: { params: Promise<{ country: string; city: string }> }): Promise<Metadata> {
   const { country, city } = await params;
-  const cityName = toTitleCase(city);
+  const citySlug = city.replace('prayer-times-', '');
+  const cityName = toTitleCase(citySlug);
   const countryName = toTitleCase(country);
   return {
     title: `Prayer Times ${cityName} Today | Prayer Timings ${cityName} ${countryName}`,
@@ -119,21 +120,22 @@ export const dynamic = "force-dynamic";
 
 export default async function CityPage({ params }: { params: Promise<{ country: string; city: string }> }) {
   const { country, city } = await params;
+  const citySlug = city.replace('prayer-times-', '');
   
   // 2. Coordinate Resolution
   const countryCode = countryCodeMap[country.toLowerCase()] || "";
-  const cleanCityName = city.replace(/-/g, ' ');
+  const cleanCityName = citySlug.replace(/-/g, ' ');
   const coords = countryCode ? getSingleCityCoords(countryCode, cleanCityName) : null;
   
  // Move these up so getCityDescription can use them
-const cityName = toTitleCase(city);
+const cityName = toTitleCase(citySlug);
 const countryName = toTitleCase(country);
 
 // 3. Concurrent Data Fetching (Includes Mosques & Description)
 const [data, monthData, cityDescription] = await Promise.all([
-  getPrayerTimes(city, country),
-  getMonthlyCalendar(city, country),
-  getCityDescription(cityName, countryName, country, city),
+  getPrayerTimes(citySlug, country),
+  getMonthlyCalendar(citySlug, country),
+  getCityDescription(cityName, countryName, country, citySlug),
 ]);
 
 
@@ -417,7 +419,7 @@ if (!data) notFound();
             return (
               <Link
                 key={citySlug}
-                href={`/${country}/${citySlug}`}
+                href={`/${country}/prayer-times-${citySlug}`}
                 className="px-4 py-3 rounded-xl text-sm font-semibold text-white/70 hover:text-white transition-all hover:scale-[1.02]"
                 style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}
               >

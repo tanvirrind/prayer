@@ -240,7 +240,7 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
     type="cities"
     items={cities.map((city) => ({
       name: city,
-      href: `/${country}/${city.toLowerCase().replace(/ /g, "-")}`,
+      href: `/${country}/prayer-times-${city.toLowerCase().replace(/ /g, "-")}`,
     }))}
     perPage={30}
   />
