@@ -1,4 +1,4 @@
-import PaginatedGrid from "@/components/PaginatedGrid.tsx";
+import PaginatedGrid from "@/components/PaginatedGrid";
 import Link from "next/link";
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
