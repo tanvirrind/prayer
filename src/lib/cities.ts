@@ -216,7 +216,7 @@ const cityPopulations: Record<string, number> = {
   // Pakistan
   "karachi": 14910352, "lahore": 11126285, "faisalabad": 3640000,
   "rawalpindi": 2098231, "islamabad": 1014825, "gujranwala": 2027001,
-  "peshawar": 1970042, "multan": 1871843, "hyderabad": 1732693,
+  "peshawar": 1970042, "multan": 1871843, "haiderabad": 1732693,
   "quetta": 1001205, "sialkot": 655852, "abbottabad": 148587,
   // UAE
   "dubai": 3331420, "abu dhabi": 1482816, "sharjah": 1274749,
