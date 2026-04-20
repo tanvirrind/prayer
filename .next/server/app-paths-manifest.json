@@ -1,6 +1,5 @@
 {
-  "/sitemap.xml/route": "app/sitemap.xml/route.js",
-  "/sitemap-cities/[id]/route": "app/sitemap-cities/[id]/route.js",
+  "/api/location/route": "app/api/location/route.js",
   "/page": "app/page.js",
   "/[country]/[city]/page": "app/[country]/[city]/page.js",
   "/[country]/page": "app/[country]/page.js"

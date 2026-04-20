@@ -23,7 +23,7 @@ interface LocationData {
   isExact: boolean; // true = GPS, false = IP fallback
 }
 
-// Most populous/famous city per country code
+// Most populous/famous city per country name
 const COUNTRY_DEFAULT_CITY: Record<string, { city: string; lat: number; lon: number }> = {
   "Pakistan": { city: "Karachi",        lat: 24.8607,  lon: 67.0011  },
   "United Arab Emirates": { city: "Dubai",          lat: 25.2048,  lon: 55.2708  },
@@ -348,7 +348,7 @@ export default function LocationPrayerTimes() {
 
               <div className="flex justify-end">
                 <Link
-                  href={`/${data.countrySlug}/${data.citySlug}`}
+                  href={`/${data.countrySlug}/prayer-times-${data.citySlug}`}
                   className="text-xs font-black uppercase tracking-wider px-5 py-2.5 rounded-xl transition-opacity hover:opacity-80"
                   style={{
                     background: "rgba(201,168,76,0.2)",
