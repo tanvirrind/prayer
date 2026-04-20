@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import FirebaseProvider from "@/components/FirebaseProvider"; // Adjust import path
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: {
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
         {children}
         <Footer />
+        <SpeedInsights />
       </body>
     </html>
   );
