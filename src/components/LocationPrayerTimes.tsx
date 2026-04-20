@@ -70,7 +70,12 @@ export default function LocationPrayerTimes() {
 const res = await fetch("/api/location");
 const json = await res.json();
 if (!json.cityName) throw new Error();
-const { latitude: lat, longitude: lon, cityName: city, countryName: country } = json;
+const { 
+  Latitude: lat, 
+  Longitude: lon, 
+  cityName: city, 
+  countryName: country 
+} = json;
         const prayerRes = await fetch(
           `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=3`
         );
