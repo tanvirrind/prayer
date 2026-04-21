@@ -93,7 +93,7 @@ export default function CommunityPage() {
 
       {/* Breadcrumb */}
       <div className="max-w-4xl mx-auto px-4 pt-5 text-xs text-white/45 font-bold uppercase tracking-wider flex items-center gap-2 w-full">
-        <Link href="/" className="hover:text-white transition-colors">Home</Link>
+        <Link href="/prayer-times" className="hover:text-white transition-colors">Home</Link>
         <span>/</span>
         <span className="text-white/75">Community Support</span>
       </div>

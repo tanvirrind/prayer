@@ -1,6 +1,10 @@
 {
-  "/api/location/route": "app/api/location/route.js",
+  "/prayer-times/api/location/route": "app/prayer-times/api/location/route.js",
   "/page": "app/page.js",
-  "/[country]/[city]/page": "app/[country]/[city]/page.js",
-  "/[country]/page": "app/[country]/page.js"
+  "/prayer-times/[country]/[city]/page": "app/prayer-times/[country]/[city]/page.js",
+  "/prayer-times/page": "app/prayer-times/page.js",
+  "/tasbih/page": "app/tasbih/page.js",
+  "/qibla/page": "app/qibla/page.js",
+  "/prayer-times/[country]/page": "app/prayer-times/[country]/page.js",
+  "/prayer-times/countries/page": "app/prayer-times/countries/page.js"
 }

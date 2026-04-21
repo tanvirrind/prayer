@@ -6,45 +6,55 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/prayer-times/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/prayer-times/page.js"
+    ],
+    "/prayer-times/api/location/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/prayer-times/api/location/route.js"
+    ],
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/api/location/route": [
+    "/prayer-times/[country]/[city]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/location/route.js"
+      "static/chunks/app/prayer-times/[country]/[city]/page.js"
     ],
-    "/[country]/[city]/page": [
+    "/tasbih/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[country]/[city]/page.js"
+      "static/chunks/app/tasbih/page.js"
     ],
-    "/sitemap-index/route": [
+    "/qibla/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/sitemap-index/route.js"
+      "static/chunks/app/qibla/page.js"
     ],
-    "/[country]/page": [
+    "/community/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[country]/page.js"
+      "static/chunks/app/community/page.js"
     ],
-    "/countries/page": [
+    "/journal/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/countries/page.js"
+      "static/chunks/app/journal/page.js"
     ],
-    "/sitemap.xml/route": [
+    "/prayer-times/[country]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/sitemap.xml/route.js"
+      "static/chunks/app/prayer-times/[country]/page.js"
     ],
-    "/sitemap-cities/[id]/route": [
+    "/prayer-times/countries/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/sitemap-cities/[id]/route.js"
+      "static/chunks/app/prayer-times/countries/page.js"
     ]
   }
 }

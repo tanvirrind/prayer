@@ -148,7 +148,7 @@ export default function LocationPrayerTimes() {
           // ❌ GPS denied — fall back to IP → country → major city
           async () => {
             try {
-              const res = await fetch("/api/location");
+              const res = await fetch("/prayer-times/api/location");
               const json = await res.json();
 
               if (!json.countryCode) throw new Error("No country from IP");

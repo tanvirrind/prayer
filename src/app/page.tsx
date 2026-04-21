@@ -2,165 +2,132 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import ProductAds from "@/components/ProductAds";
-import { Compass, Moon, Users } from "lucide-react";
-import LocationPrayerTimes from "@/components/LocationPrayerTimes";
-
-
-const features = [
-  { 
-    title: "Qibla Finder", 
-    desc: "Precision compass for accurate prayer direction.", 
-    href: "/qibla", 
-    icon: <Compass className="w-8 h-8" />
-  },
-  { 
-    title: "Tasbih Counter", 
-    desc: "Digital counter for daily remembrance.", 
-    href: "/tasbih", 
-    icon: <Moon className="w-8 h-8" />
-  },
-  { 
-    title: "Prayer Companion", 
-    desc: "Track and share your spiritual journey.", 
-    href: "/community", 
-    icon: <Users className="w-8 h-8" />
-  },
-];
+import Footer from "@/components/Footer";
+import { Compass, Moon, Users, BookOpen, Star, Clock, ScrollText, Heart } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Prayer Timings in Pakistan | Prayer Times All Cities | Souq Al Madina",
+  title: "Noor — Your Daily Spirtual Companion | Souq Al Madina",
   description:
-    "Accurate Prayer timings for all cities in Pakistan — Karachi, Lahore, Islamabad, Faisalabad and 50+ cities. Also covers UAE, UK, USA, Saudi Arabia. Fajr, Dhuhr, Asr, Maghrib, Isha times updated daily.",
+    "Noor by Souq Al Madina. One app for Prayer Times, Quran, Hadith, Islamic Names, Qibla, Tasbih and more. Your complete daily spiritual companion.",
   keywords:
-    "prayer timings Pakistan, prayer times Karachi, prayer times Lahore, prayer time today, salah times Pakistan, Islamic prayer times",
-  alternates: { canonical: "https://prayer.souqalmadina.com.pk" },
+    "Noor app, Islamic app, prayer times, Quran app, Hadith, Islamic names, Qibla finder, Muslim app Pakistan",
+  alternates: { canonical: "https://noor.souqalmadina.com.pk" },
 };
 
-const countries = [
+// ── LIVE features ──────────────────────────────────────────────────────────────
+const liveApps = [
   {
-    name: "Pakistan",
-    slug: "pakistan",
-    flag: "🇵🇰",
-    cities: ["Karachi", "Lahore", "Islamabad", "Faisalabad", "Multan", "Peshawar", "Quetta", "Rawalpindi", "Sialkot", "Gujranwala", "Hyderabad", "Sukkur"],
-    priority: true,
+    icon: <Clock className="w-7 h-7" />,
+    title: "Prayer Times",
+    tag: "Worldwide · Offline",
+    desc: "Accurate Fajr, Dhuhr, Asr, Maghrib & Isha for 50,000+ cities across 160+ countries. Monthly calendar included.",
+    href: "/prayer-times",
+    cta: "View Prayer Times →",
   },
   {
-    name: "Saudi Arabia",
-    slug: "saudi-arabia",
-    flag: "🇸🇦",
-    cities: ["Mecca", "Medina", "Riyadh", "Jeddah", "Dammam", "Taif"],
-    priority: true,
+    icon: <Compass className="w-7 h-7" />,
+    title: "Qibla Finder",
+    tag: "GPS · Compass",
+    desc: "Precision Qibla direction from anywhere in the world using your device GPS and compass.",
+    href: "/qibla",
+    cta: "Open Qibla →",
   },
   {
-    name: "United Arab Emirates",
-    slug: "united-arab-emirates",
-    flag: "🇦🇪",
-    cities: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Al Ain"],
-    priority: false,
+    icon: <Moon className="w-7 h-7" />,
+    title: "Tasbih Counter",
+    tag: "Digital · Free",
+    desc: "Digital tasbih counter for your daily dhikr and remembrance of Allah. Simple and distraction-free.",
+    href: "/tasbih",
+    cta: "Open Tasbih →",
   },
   {
-    name: "United Kingdom",
-    slug: "united-kingdom",
-    flag: "🇬🇧",
-    cities: ["London", "Manchester", "Birmingham", "Leeds", "Bradford", "Glasgow"],
-    priority: false,
-  },
-  {
-    name: "United States",
-    slug: "united-states",
-    flag: "🇺🇸",
-    cities: ["New York", "Chicago", "Houston", "Los Angeles", "Dallas", "Detroit"],
-    priority: false,
-  },
-  {
-    name: "Canada",
-    slug: "canada",
-    flag: "🇨🇦",
-    cities: ["Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa"],
-    priority: false,
-  },
-  {
-    name: "Australia",
-    slug: "australia",
-    flag: "🇦🇺",
-    cities: ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide"],
-    priority: false,
-  },
-  {
-    name: "Turkey",
-    slug: "turkey",
-    flag: "🇹🇷",
-    cities: ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"],
-    priority: false,
-  },
-  {
-    name: "Malaysia",
-    slug: "malaysia",
-    flag: "🇲🇾",
-    cities: ["Kuala Lumpur", "Penang", "Johor Bahru", "Kota Kinabalu"],
-    priority: false,
-  },
-  {
-    name: "Indonesia",
-    slug: "indonesia",
-    flag: "🇮🇩",
-    cities: ["Jakarta", "Surabaya", "Bandung", "Medan", "Makassar"],
-    priority: false,
-  },
-  {
-    name: "Bangladesh",
-    slug: "bangladesh",
-    flag: "🇧🇩",
-    cities: ["Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Khulna"],
-    priority: false,
-  },
-  {
-    name: "Egypt",
-    slug: "egypt",
-    flag: "🇪🇬",
-    cities: ["Cairo", "Alexandria", "Giza", "Sharm el-Sheikh"],
-    priority: false,
+    icon: <Users className="w-7 h-7" />,
+    title: "Community",
+    tag: "Journal · Tracking",
+    desc: "Track your prayers, share your spiritual journey and stay connected with your community.",
+    href: "/community",
+    cta: "Join Community →",
   },
 ];
 
-export const dynamic = "force-dynamic";
+// ── COMING SOON features ───────────────────────────────────────────────────────
+const comingApps = [
+  {
+    icon: <BookOpen className="w-7 h-7" />,
+    title: "Quran",
+    tag: "Arabic · Translation · Audio",
+    desc: "Read, listen and reflect on the complete Quran with multiple translations and tafsir.",
+  },
+  {
+    icon: <ScrollText className="w-7 h-7" />,
+    title: "Hadith",
+    tag: "Bukhari · Muslim · More",
+    desc: "Browse authentic hadith collections from the most trusted Islamic scholars worldwide.",
+  },
+  {
+    icon: <Heart className="w-7 h-7" />,
+    title: "Islamic Names",
+    tag: "Meanings · Origins",
+    desc: "Discover beautiful Islamic names with Arabic meanings, origins and linguistic roots for your family.",
+  },
+  {
+    icon: <Star className="w-7 h-7" />,
+    title: "Dua Collection",
+    tag: "Adhkar · Supplications",
+    desc: "Morning/evening adhkar, travel duas and daily supplications in one beautifully organised place.",
+  },
+  {
+    icon: <Moon className="w-7 h-7" />,
+    title: "Ramadan Tracker",
+    tag: "Suhoor · Iftar · Goals",
+    desc: "Suhoor & Iftar times, Quran reading plan and daily goals throughout the blessed month.",
+  },
+  {
+    icon: <Compass className="w-7 h-7" />,
+    title: "Hajj & Umrah Guide",
+    tag: "Step-by-step · Maps",
+    desc: "Step-by-step rituals, duas and maps for every pilgrim making the journey to Makkah.",
+  },
+];
 
-export default function HomePage() {
-  const pakistanCountry = countries.find((c) => c.slug === "pakistan")!;
-  const otherCountries = countries.filter((c) => c.slug !== "pakistan");
+const stats = [
+  { num: "125,000+", label: "Cities and Towns" },
+  { num: "170+", label: "Countries" },
+  { num: "6,236", label: "Quran Verses" },
+  { num: "5", label: "Daily Prayers" },
+];
 
+export default function NoorHomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
 
-      {/* Hero */}
-      <section className="relative pt-20 pb-12 px-4 text-center overflow-hidden">
+      {/* ── Hero ── */}
+      <section className="relative pt-20 pb-14 px-4 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto space-y-6">
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest"
             style={{
               background: "rgba(201,168,76,0.15)",
               border: "1px solid rgba(201,168,76,0.35)",
-              color: "#c9a84c",
+              color: "#c2ab2b",
             }}
           >
-            <span className="pulse-gold w-2 h-2 rounded-full bg-yellow-400 inline-block" />
-            Live prayer timings for 50,000+ cities
+            <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block" />
+            Your daily Spirtual companion
           </div>
 
           <h1
             className="text-5xl md:text-7xl font-black tracking-tight leading-tight text-white"
             style={{ letterSpacing: "-2px" }}
           >
-            Your Daily
+            Noor
             <br />
             <span
-              className="text-yellow-300 italic font-light"
-              style={{
-                fontFamily: "'Playfair Display', serif",
-              }}
+              className="italic font-light"
+              style={{ fontFamily: "'Playfair Display', serif", color: "#c9a84c" }}
             >
-              Spiritual Hub.
+              By Souq Al Madina
             </span>
           </h1>
 
@@ -170,188 +137,299 @@ export default function HomePage() {
 
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <Link
-              href="/pakistan"
+              href="/prayer-times"
               className="px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center gap-2 transition-opacity hover:opacity-85"
               style={{ background: "#c9a84c", color: "#0a3d2e" }}
             >
-              🇵🇰 Pakistan Prayer Times →
+              🕌 Prayer Times →
             </Link>
-            <Link
-              href="/saudi-arabia"
+            {/* FIX: was also linking to /prayer-times — now scrolls to features */}
+            <a
+              href="#features"
               className="px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center gap-2 text-white transition-colors hover:bg-white/20"
-              style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)" }}
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}
             >
-              🕋 Makkah & Madinah
-            </Link>
+              Explore All Features
+            </a>
           </div>
         </div>
       </section>
-<LocationPrayerTimes />
 
-{/* Quick Pakistan city links */}
-<section className="max-w-5xl mx-auto px-4 pb-10 w-full">
-</section>
-      {/* Quick Pakistan city links — high SEO value */}
-      <section className="max-w-5xl mx-auto px-4 pb-10 w-full">
+      {/* ── Stats ── */}
+      <section className="max-w-4xl mx-auto px-4 pb-12 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className="text-center py-5 px-4 rounded-2xl"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+              }}
+            >
+              <div className="text-3xl font-black mb-1" style={{ color: "#c9a84c" }}>
+                {s.num}
+              </div>
+              <div className="text-xs font-bold uppercase tracking-wider text-white/45">
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Features ── */}
+      <section id="features" className="max-w-4xl mx-auto px-4 pb-14 w-full">
+
+        {/* Available Now */}
+        <div className="mb-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: "#c9a84c" }}>
+            🌙 Available Now
+          </p>
+          <h2
+            className="text-4xl md:text-5xl font-black text-white tracking-tight"
+            style={{ letterSpacing: "-1.5px" }}
+          >
+            Everything a Muslim{" "}
+            <span
+              className="italic font-light"
+              style={{ fontFamily: "'Playfair Display',serif", color: "#c9a84c" }}
+            >
+              needs daily.
+            </span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-14">
+          {liveApps.map((app) => (
+            <div
+              key={app.title}
+              className="group p-6 rounded-[28px] flex flex-col transition-all duration-300 hover:scale-[1.02]"
+              style={{
+                background: "rgba(10,61,46,0.5)",
+                border: "1px solid rgba(201,168,76,0.2)",
+                backdropFilter: "blur(12px)",
+              }}
+            >
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                style={{ background: "rgba(201,168,76,0.15)", color: "#c9a84c" }}
+              >
+                {app.icon}
+              </div>
+              <div className="text-lg font-black text-white tracking-tight mb-1">{app.title}</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-3">{app.tag}</div>
+              <p className="text-sm text-white/55 leading-relaxed flex-1 mb-4">{app.desc}</p>
+              <Link
+                href={app.href}
+                className="text-xs font-black uppercase tracking-widest transition-colors"
+                style={{ color: "#c9a84c" }}
+              >
+                {app.cta}
+              </Link>
+            </div>
+          ))}
+        </div>
+
+        {/* Coming Soon — separated visually from live features */}
+        <div className="mb-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: "#c9a84c" }}>
+            🚀 Coming Soon
+          </p>
+          <h2
+            className="text-3xl md:text-4xl font-black text-white tracking-tight"
+            style={{ letterSpacing: "-1px" }}
+          >
+            We're just{" "}
+            <span
+              className="italic font-light"
+              style={{ fontFamily: "'Playfair Display',serif", color: "#c9a84c" }}
+            >
+              getting started.
+            </span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {comingApps.map((app) => (
+            <div
+              key={app.title}
+              className="group p-6 rounded-[28px] flex flex-col"
+              style={{
+                background: "rgba(10,61,46,0.3)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                backdropFilter: "blur(12px)",
+                opacity: 0.75,
+              }}
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ background: "rgba(201,168,76,0.08)", color: "rgba(201,168,76,0.5)" }}
+                >
+                  {app.icon}
+                </div>
+                <span
+                  className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full self-start"
+                  style={{
+                    background: "rgba(201,168,76,0.1)",
+                    color: "rgba(201,168,76,0.6)",
+                    border: "1px solid rgba(201,168,76,0.2)",
+                  }}
+                >
+                  Soon
+                </span>
+              </div>
+              <div className="text-lg font-black text-white/60 tracking-tight mb-1">{app.title}</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-white/25 mb-3">{app.tag}</div>
+              <p className="text-sm text-white/35 leading-relaxed flex-1">{app.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Product Ads ── */}
+      <div className="bg-white py-2">
+        <ProductAds />
+      </div>
+
+      {/* ── About Noor ── */}
+      <section className="max-w-4xl mx-auto px-4 py-14 w-full">
+        <div className="mb-6">
+          <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: "#c9a84c" }}>
+            ✨ About Noor
+          </p>
+          <h2
+            className="text-4xl font-black text-white tracking-tight"
+            style={{ letterSpacing: "-1.5px" }}
+          >
+            Built for Muslims. {" "}
+            <span
+              className="italic font-light"
+              style={{ fontFamily: "'Playfair Display',serif", color: "#c9a84c" }}
+            >
+               Free forever.
+            </span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <article
+            className="p-8 rounded-[28px] text-white"
+            style={{
+              background: "rgba(10,61,46,0.7)",
+              border: "1px solid rgba(201,168,76,0.2)",
+              backdropFilter: "blur(16px)",
+            }}
+          >
+            <div className="text-3xl mb-4">🌙</div>
+            <h3 className="text-xl font-black mb-3 tracking-tight">Our Mission</h3>
+            <p className="text-white/65 leading-relaxed text-sm mb-4">
+              Noor — meaning <em style={{ color: "#c9a84c" }}>"light"</em> in Arabic — was built
+              with one purpose: to make it effortless for every Muslim to practice their faith in
+              today's busy world.
+            </p>
+            <p className="text-white/65 leading-relaxed text-sm">
+              Whether you're checking Fajr time before sunrise, looking up a hadith, or teaching
+              your child an Islamic name — Noor is your quiet, always-available companion. No
+              subscriptions. No ads hiding your prayer times. Just pure, focused Islamic utility.
+            </p>
+          </article>
+
+          <article
+            className="p-8 rounded-[28px] text-white"
+            style={{
+              background: "rgba(10,61,46,0.7)",
+              border: "1px solid rgba(201,168,76,0.2)",
+              backdropFilter: "blur(16px)",
+            }}
+          >
+            <div className="text-3xl mb-4">🛍️</div>
+            <h3 className="text-xl font-black mb-3 tracking-tight">About Souq Al Madina</h3>
+            <p className="text-white/65 leading-relaxed text-sm mb-4">
+              Souq Al Madina is a Pakistani Islamic lifestyle brand dedicated to building products
+              that help Muslims live their faith with ease and beauty. From digital tools to halal
+              products — everything under one trusted name.
+            </p>
+            <p className="text-white/65 leading-relaxed text-sm">
+              Noor is our flagship digital platform, bringing together all of Souq Al Madina's
+              Islamic tools in one place. We are based in Pakistan and proudly serve Muslims across
+              the globe.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-5">
+              {["Prayer Apps", "Islamic Content", "Halal Products", "Pakistan"].map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[10px] font-bold px-3 py-1 rounded-full"
+                  style={{
+                    background: "rgba(201,168,76,0.15)",
+                    color: "#c9a84c",
+                    border: "1px solid rgba(201,168,76,0.25)",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {/* ── Final CTA ── */}
+      <section className="max-w-4xl mx-auto px-4 pb-16 w-full text-center">
         <div
-          className="rounded-3xl p-6 md:p-10"
+          className="p-12 rounded-[28px]"
           style={{
             background: "rgba(10,61,46,0.7)",
             border: "1px solid rgba(201,168,76,0.25)",
             backdropFilter: "blur(16px)",
           }}
         >
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl">🇵🇰</span>
-            <div>
-              <h2 className="text-xl font-black text-white tracking-tight">
-                Prayer Timings in Pakistan's Top Cities
-              </h2>
-              <p className="text-xs text-white/50 font-bold uppercase tracking-wider">
-                Most searched cities
-              </p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {pakistanCountry.cities.map((city) => (
-              <Link
-                key={city}
-                href={`/pakistan/prayer-times-${city.toLowerCase().replace(/ /g, "-")}`}
-                className="group flex items-center justify-between p-4 rounded-2xl text-white transition-all duration-200 hover:scale-[1.02]"
-                style={{
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                }}
-              >
-                <div>
-                  <div className="font-bold text-sm">{city}</div>
-                  <div className="text-[10px] text-white/45 font-bold uppercase tracking-wider mt-0.5">
-                    Prayer Timings
-                  </div>
-                </div>
-                <span className="text-white/30 group-hover:text-yellow-400 transition-colors text-lg">→</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Feature Pills Section */}
-      <section className="max-w-5xl mx-auto px-4 py-12 w-full">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {features.map((feature) => (
-            <Link
-              key={feature.title}
-              href={feature.href}
-              className="group p-8 rounded-[32px] transition-all duration-300 hover:scale-[1.02] hover:shadow-xl flex flex-col gap-6"
-              style={{
-                background: "rgba(10,61,46,0.5)",
-                border: "1px solid rgba(201,168,76,0.3)",
-                backdropFilter: "blur(12px)",
-              }}
+          <div className="text-4xl mb-4">🌙</div>
+          <h2
+            className="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight"
+            style={{ letterSpacing: "-1px" }}
+          >
+            Start with Prayer Times.
+            <br />
+            <span
+              className="italic font-light"
+              style={{ fontFamily: "'Playfair Display',serif", color: "#c9a84c" }}
             >
-              <div 
-                className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300"
-                style={{
-                  background: "rgba(201,168,76,0.15)",
-                  color: "#c9a84c"
-                }}
-              >
-                {feature.icon}
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-black tracking-tight text-white">{feature.title}</h3>
-                <p className="text-sm text-white/60 leading-relaxed">{feature.desc}</p>
-              </div>
-              <div className="pt-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest" style={{ color: "#c9a84c" }}>
-                <span>Launch →</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Product Ads */}
-      <div className="bg-white/95 backdrop-blur py-2">
-        <ProductAds />
-      </div>
-
-      {/* All Countries */}
-      <section className="max-w-5xl mx-auto px-4 py-14 w-full">
-        <div className="mb-8">
-          <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: "#c9a84c" }}>
-            🌐 Global Coverage
-          </p>
-          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight" style={{ letterSpacing: "-1.5px" }}>
-            Prayer Times by{" "}
-            <span className="italic font-light" style={{ fontFamily: "'Playfair Display',serif", color: "#c9a84c" }}>
-              Country.
+              Explore everything else.
             </span>
           </h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {otherCountries.map((country) => (
+          <p className="text-white/60 max-w-md mx-auto mb-8 text-sm leading-relaxed">
+            Noor is completely free. No account needed to check prayer times. Begin your journey
+            with accurate Salah timings for your city.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
             <Link
-              key={country.slug}
-              href={`/${country.slug}`}
-              className="group p-6 rounded-[28px] transition-all duration-300 hover:scale-[1.02]"
+              href="/prayer-times"
+              className="px-8 py-4 rounded-2xl font-bold text-sm transition-opacity hover:opacity-85"
+              style={{ background: "#c9a84c", color: "#0a3d2e" }}
+            >
+              🕌 Open Prayer Times
+            </Link>
+            {/* FIX: was /prayer-times/countries — aligned to correct route */}
+            <Link
+              href="/prayer-times/countries"
+              className="px-8 py-4 rounded-2xl font-bold text-sm text-white transition-colors hover:bg-white/20"
               style={{
                 background: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(255,255,255,0.15)",
-                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.2)",
               }}
             >
-              <div className="flex items-start justify-between mb-5">
-                <span className="text-3xl">{country.flag}</span>
-                <span className="text-white/30 group-hover:text-yellow-400 text-xl transition-colors">→</span>
-              </div>
-              <div className="text-white font-black text-lg tracking-tight mb-1">{country.name}</div>
-              <div className="text-xs text-white/45 font-bold uppercase tracking-wider mb-4">
-                {country.cities.length} cities available
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {country.cities.slice(0, 3).map((city) => (
-                  <span
-                    key={city}
-                    className="text-[10px] font-bold px-2.5 py-1 rounded-full"
-                    style={{
-                      background: "rgba(255,255,255,0.1)",
-                      color: "rgba(255,255,255,0.65)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                    }}
-                  >
-                    {city}
-                  </span>
-                ))}
-              </div>
+              Browse All Countries
             </Link>
-          ))}
+          </div>
         </div>
       </section>
 
-      {/* SEO Content Block */}
-      <section className="bg-white/95 py-14">
-        <div className="max-w-4xl mx-auto px-4">
-          <article>
-            <h2 className="text-3xl font-black mb-6" style={{ color: "#0a3d2e", letterSpacing: "-1px" }}>
-              About Prayer Timings in Pakistan
-            </h2>
-            <div className="prose prose-stone max-w-none text-gray-600 leading-relaxed space-y-4">
-              <p>
-                Performing the five daily prayers (Salah) on time is one of the most important obligations for every Muslim. Our platform provides the most accurate <strong>Namaz timings for Pakistan</strong> including Karachi, Lahore, Islamabad, Faisalabad, Multan, Peshawar and all major cities.
-              </p>
-              <p>
-                We use the <strong>Aladhan API</strong> — a globally trusted source for Islamic prayer time calculations — to ensure you always have the correct <strong>Fajr, Dhuhr, Asr, Maghrib and Isha</strong> times for your city. Times are updated daily and adjusted for your local timezone.
-              </p>
-              <p>
-                Whether you are in Pakistan or traveling abroad to Saudi Arabia, UAE, UK, USA or anywhere in the world, Souq Al Madina Prayer Timeings keeps you connected to your daily Salah.
-              </p>
-            </div>
-          </article>
-        </div>
-      </section>
-
+      
     </div>
   );
 }

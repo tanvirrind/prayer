@@ -48,7 +48,8 @@ function getNextPrayerIndex(cur: number, prayers: Prayer[]) {
 }
 
 // Convert "04:31" (24h) → "4:31 AM"
-function to12h(t: string) {
+function to12h(t?: string) {
+  if (!t) return "--:--"; // Safety fallback prevents crashes
   const clean = t.split(" ")[0];
   const [h, m] = clean.split(":").map(Number);
   const ampm = h >= 12 ? "PM" : "AM";
@@ -124,7 +125,7 @@ export default function PrayerCardsLive({ mainPrayers, extraTimings, timezone }:
         <div className="grid grid-cols-3 gap-3">
           {extraTimings.map((t) => (
             <div key={t.name} className="p-4 rounded-2xl text-center bg-white/90">
-              <div className="text-xs font-black uppercase tracking-wider text-gray-400 mb-1">
+              <div className="text-xs font-black uppercase tracking-wider text-[#0a3d2e] mb-1">
                 {t.name}
               </div>
               <div className="text-xl font-black" style={{ color: "#0a3d2e" }}>

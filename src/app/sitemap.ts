@@ -1,23 +1,52 @@
-import type { MetadataRoute } from "next";
-import { countrySlugs } from "@/lib/countrySlugs";
+import { MetadataRoute } from 'next';
 
-const BASE = "https://prayer.souqalmadina.com.pk";
+const BASE_URL = "https://noor.souqalmadina.com.pk";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const urls: MetadataRoute.Sitemap = [
-    { url: BASE, changeFrequency: "daily", priority: 1 },
-    { url: `${BASE}/countries`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/tasbih`, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE}/qibla`, changeFrequency: "monthly", priority: 0.5 },
-  ];
+  const today = new Date();
 
-  for (const countrySlug of countrySlugs) {
-    urls.push({
-      url: `${BASE}/${countrySlug}`,
-      changeFrequency: "monthly",
+  return [
+    {
+      url: `${BASE_URL}/`,
+      lastModified: today,
+      changeFrequency: 'daily',
+      priority: 1.0,
+    },
+    {
+      url: `${BASE_URL}/quran`,
+      lastModified: today,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/prayer-times`,
+      lastModified: today,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/tasbih`,
+      lastModified: today,
+      changeFrequency: 'weekly',
       priority: 0.8,
-    });
-  }
-
-  return urls;
+    },
+    {
+      url: `${BASE_URL}/qibla`,
+      lastModified: today,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/community`,
+      lastModified: today,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/journal`,
+      lastModified: today,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    }
+  ];
 }

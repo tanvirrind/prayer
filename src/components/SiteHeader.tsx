@@ -15,7 +15,7 @@ export default function SiteHeader() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "All Countries", href: "/countries" },
+    { name: "Prayer Times", href: "/prayer-times" },
     { name: "Tasbih", href: "/tasbih" },
     { name: "Qibla", href: "/qibla" },
     { name: "Community", href: "/community" },
@@ -50,12 +50,12 @@ export default function SiteHeader() {
               className="w-11 h-11 rounded-xl flex items-center justify-center overflow-hidden"
               style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.4)" }}
             >
-              <Image src="/favicon.png" alt="Souq Al Madina" width={34} height={34} />
+              <img src="/favicon.png" alt="Souq Al Madina" width={34} height={34} />
             </div>
             <div className="leading-tight">
-              <div className="text-sm font-black tracking-tight text-white">Prayer Timeings</div>
+              <div className="text-2xl font-black tracking-tight text-white">Noor </div>
               <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#c9a84c" }}>
-                Souq Al Madina
+                by Souq Al Madina
               </div>
             </div>
           </Link>

@@ -1,8 +1,16 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from 'next';
+
+const BASE_URL = "https://noor.souqalmadina.com.pk";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
-    sitemap: "https://prayer.souqalmadina.com.pk/sitemap-index",
+    rules: {
+      userAgent: '*',
+      allow: '/',
+    },
+    sitemap: [
+      `${BASE_URL}/sitemap.xml`,
+      `${BASE_URL}/prayer-times/sitemap-index`
+    ],
   };
 }

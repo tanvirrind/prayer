@@ -1,4 +1,5 @@
 import cities from "cities.json";
+import tzlookup from "tz-lookup";
 
 type City = {
   name: string;
@@ -203,14 +204,49 @@ export function getCitiesBySlug(countrySlug: string): string[] {
     })
     .sort();
 }
-export function getSingleCityCoords(countryCode: string, cityName: string): { lat: string; lng: string } | null {
-  const city = (cities as City[]).find(
-    (c) =>
-      c.country === countryCode.toUpperCase() &&
-      c.name.toLowerCase() === cityName.toLowerCase()
-  );
-  return city ? { lat: city.lat, lng: city.lng } : null;
+
+// Helper function to strip accents, macrons, and punctuation
+function normalizeString(str: string): string {
+  return str
+    .normalize("NFD") // Decomposes accented characters
+    .replace(/[\u0300-\u036f]/g, "") // Removes the diacritics (ū -> u)
+    .replace(/['"‘’]/g, "") // Removes apostrophes and smart quotes
+    .replace(/-/g, " ") // Replaces dashes with spaces
+    .replace(/\s+/g, " ") // Cleans up multiple spaces
+    .toLowerCase()
+    .trim();
 }
+
+export interface CityData {
+  lat: number;
+  lng: number;
+  timezone: string;
+}
+
+export function getSingleCityCoords(countryCode: string, cityName: string): CityData | null {
+  const searchName = normalizeString(cityName);
+
+  const city = (cities as City[]).find((c) => {
+    if (c.country !== countryCode.toUpperCase()) return false;
+    
+    // Normalize the database name on the fly to ensure a perfect match
+    const dbName = normalizeString(c.name);
+    return dbName === searchName;
+  });
+
+  if (!city) return null;
+
+  const latNum = parseFloat(city.lat);
+  const lngNum = parseFloat(city.lng);
+  const timezone = tzlookup(latNum, lngNum);
+
+  return { 
+    lat: latNum, 
+    lng: lngNum, 
+    timezone: timezone 
+  };
+}
+
 // Population data for major cities (top cities per country)
 const cityPopulations: Record<string, number> = {
   // Pakistan
@@ -325,4 +361,14 @@ export function getMajorCities(countrySlug: string): string[] {
     });
 
   return sortedCities.map((c) => c.name);
+}
+export function slugifyCityName(str: string): string {
+  return str
+    .normalize("NFD") // Decomposes accented characters
+    .replace(/[\u0300-\u036f]/g, "") // Removes diacritics
+    .replace(/['"‘’]/g, "") // Removes quotes and apostrophes
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-") // Replaces spaces with hyphens
+    .replace(/[^a-z0-9-]/g, ""); // Strips out any remaining invalid URL characters
 }
